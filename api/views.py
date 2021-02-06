@@ -107,10 +107,11 @@ class CreateCharityAccountView(View):
             (user,created) = User.objects.get_or_create(username=username)
             try:
                 CharityAccount.objects.get(email=email)
-            except Exception as e:
                 response.status_code=400
                 response.content = json.dumps({"error":"An account already exists with this email"})
                 return response
+            except Exception as e:
+                pass
             if created:
                 # create user 
                 user.set_password(password)
