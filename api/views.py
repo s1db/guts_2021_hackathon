@@ -98,7 +98,6 @@ class NewFoodRequest(View):
             email = request.POST.get("email")
             charity_email = request.POST.get("charity_email")
             order_date = request.POST.get("order_date")
-            print(order_date)
             order_size = request.POST.get("order_size")
 
             if len(CharityAccount.objects.filter(email=charity_email)) == 0:
@@ -138,6 +137,7 @@ class NewFoodRequest(View):
             response.content = json.dumps({"error":"Invalid request, 'email' is missing from request"})
             response.status_code = 400
         return response
+
 class CreateCharityAccountView(View):
 
     def get(self,request):
@@ -220,7 +220,6 @@ class CharityListView(View):
         response = HttpResponse(content_type="application/json")
         response['message'] = ""
         response.content = {}
-
         #check email present
         try: # check email exists
             charities = {}
@@ -230,9 +229,9 @@ class CharityListView(View):
                     "address":serialize('json',[charity.address]),
                     "diet_options":serialize('json',[CharityDietaryOptions.objects.get(charity=charity).dietary_options])
                     }
-            response.content = json.dumps(charities)
-            response.status_code = 200
-            response['message'] = "Ok"
+            x = JsonResponse(charities)
+            print(x)
+            return x
         except Exception as e:
             print(e)
             response.status_code = 200
