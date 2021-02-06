@@ -98,7 +98,7 @@ class CreateCharityAccountView(View):
         email = request.POST.get("email","")
         username = email[:email.find("@")]
         password = request.POST.get("password")
-        charityname = request.POST.get("name","")
+        charityname = request.POST.get("charityname","")
         phone = request.POST.get("phone","")
 
         postcode = request.POST.get("postcode")
