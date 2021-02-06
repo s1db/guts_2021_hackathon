@@ -26,6 +26,7 @@ ON_SERVER = env("ON_SERVER", default=True)
 
 ALLOWED_HOSTS = ["*", "localhost","127.0.0.1"]
 CORS_ALLOW_CREDENTIALS = True
+
 if ON_SERVER:
     CORS_ORIGIN_REGEX_WHITELIST = env.list(
         "CORS_ORIGIN_REGEX_WHITELIST", default=[]
@@ -60,11 +61,25 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    #"django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+     "http://127.0.0.1:9000",
+     "http://127.0.0.1:4000",
+     "http://localhost:8000",
+     "http://localhost:4000",
+     "https://foodbank.mountiny.vercel.app/",
+     "http://foodbank.mountiny.vercel.app/",
+     "*"
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 if not ON_SERVER:
     INSTALLED_APPS.append("debug_toolbar")
