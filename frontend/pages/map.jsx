@@ -1,11 +1,12 @@
 import Layout from "../components/Layout";
 import Link from "next/link";
 import FilterLabel from "../components/FilterLabel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
 import { getCharityList, getPostcodeInfo } from '../services/FoobanksApi.js'
+import { api } from '../services/Api.js'
 
 const Map = ReactMapboxGl({
   accessToken:
@@ -45,40 +46,54 @@ const foodbanks = [
 
 
 const diets = {
-  vegan: {
+  has_vegan: {
     name: "Vegan",
     selected: false
   },
-  gluten: {
+  has_gluten_free: {
     name: "Gluten-free",
     selected: false
   },
-  sanitary: {
+  has_sanitary_products: {
     name: "Sanitary products",
     selected: false
   },
-  halal: {
+  has_halal: {
     name: "Halal",
     selected: false
   },
-  vegetarian: {
+  has_vegetarian: {
     name: "Vegetarian",
     selected: false
   },
-  kosher: {
+  has_kosher: {
     name: "Kosher",
     selected: false
   },
-  lactose: {
+  has_lactose_free: {
     name: "Lactose-free",
     selected: false
   }
 }
 
-const MapPage = () => {
+const MapPage = ({ charities }) => {
   const [postcode, setPostcode] = useState("")
   const [postcodeError, setPostcodeError] = useState(null)
   const [filters, setFilters] = useState(diets)
+  let formatted = []
+
+  Object.keys(charities).map((email) => {
+    let charity = {
+      pk: JSON.parse(charities[email].address)[0].pk,
+      email,
+      address: JSON.parse(charities[email].address)[0].fields,
+      charity: JSON.parse(charities[email].charity)[0].fields,
+      diet_options: JSON.parse(charities[email].diet_options)[0].fields
+    }
+    formatted.push(charity)
+  })
+
+  console.log('charities: ', formatted)
 
   const handleFiltersChange = (name) => {
 
@@ -88,11 +103,9 @@ const MapPage = () => {
       selected: !newFilters[name].selected
     }
     setFilters(newFilters)
+
   }
 
-  // const {data, error } = getCharityList()
-
-  // console.log('Charities: ', data)
 
   const handleMarkerClick = () => {
     console.log('Marker clicked')
@@ -105,23 +118,27 @@ const MapPage = () => {
   const handleSearchPostcode = async () => {
 
     setPostcodeError(null);
+    
     if (postcode.length < 3 || postcode.length > 9) {
       setPostcodeError("The postcode is invalid.")
       return
     }
-    // api.get(`http://api.postcodes.io/postcodes/${postcode}`).then((res) => {
-    //   console.log('REsponse: ', res)
-    // })
+
     try {
 
       const result = await getPostcodeInfo(postcode)
-      console.log('result: ', result)
+
+      if (result.postcode) {
+
+
+      } else {
+        setPostcodeError("The postcode is invalid.")
+      }
 
     } catch (e) {
+      console.log('error: ', e)
       setPostcodeError("The postcode is invalid.")
     }
-    // // const response = postcodeInfo.json()
-    // console.log('postcode info: ', data)
   }
   const handlePostcodeChange = (target) => {
     setPostcodeError(null);
@@ -143,10 +160,10 @@ const MapPage = () => {
           }}
         >
           {
-            foodbanks.map((fb, key) => (
+            formatted.map((fb, key) => (
               <Marker
                 key={key}
-                coordinates={fb.geo}
+                coordinates={[fb.address.longitude,fb.address.latitude]}
                 onClick={handleMarkerClick}
                 anchor="bottom" >
                 <img src={"marker.svg"}/>
@@ -207,10 +224,10 @@ const MapPage = () => {
 
           <div className="w-full flex flex-col justify-start px-4 py-4">
           {
-            foodbanks.map((fb, key) => (
+            formatted.map((fb, key) => (
               <div key={key} className="w-full mb-4 p-4 relative bg-accents-0 rounded-lg cursor-pointer" onClick={handleListItemClick}>
-                <h3 className="text-2xl pb-4 font-bold text-white">{fb.name} {key}</h3>
-                <p className="font-medium text-white pb-8">{fb.address}</p>
+                <h3 className="text-2xl pb-4 font-bold text-white">{fb.charity.charityName} {key}</h3>
+                <p className="font-medium text-white pb-8">{fb.address.address_line_1}</p>
                 <div className="flex justify-between items-center">
                   <div className="flex">
 
@@ -244,3 +261,25 @@ const MapPage = () => {
 }
 
 export default MapPage;
+
+export async function getServerSideProps(context) {
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
+
+  const charityListUrl = `${API_URL}/charitylist`;
+
+  const res = await fetch(charityListUrl, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+  }
+  })
+
+  const charities = await res.json()
+
+  return {
+    props: {
+      charities
+    }, // will be passed to the page component as props
+  }
+}
