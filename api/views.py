@@ -209,7 +209,6 @@ class CreateCharityAccountView(View):
             response.content = json.dumps({"error":"Email and password are required for account creation"})
         return response
 
-
 class CharityListView(APIView):
     'returns list of all charities'
 #    permission_classes = (IsAuthenticated,)
@@ -232,9 +231,8 @@ class CharityListView(APIView):
                     "address":serialize('json',[charity.address]),
                     "diet_options":serialize('json',[CharityDietaryOptions.objects.get(charity=charity).dietary_options])
                     }
-            x = JsonResponse(charities)
-            print(x)
-            return x
+
+            return JsonResponse({"Hello":"world"})#JsonResponse(charities)
         except Exception as e:
             print(e)
             response.status_code = 200
