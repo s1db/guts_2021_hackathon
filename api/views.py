@@ -232,7 +232,7 @@ class CharityListView(APIView):
                     "diet_options":serialize('json',[CharityDietaryOptions.objects.get(charity=charity).dietary_options])
                     }
 
-            return JsonResponse({"Hello":"world"})#JsonResponse(charities)
+            return JsonResponse(charities)
         except Exception as e:
             print(e)
             response.status_code = 200
