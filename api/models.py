@@ -39,3 +39,14 @@ class CharityDietaryOptions(models.Model):
 class UserDietaryPreferences(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dietary_preferences = models.ForeignKey(DiertaryRequirements, on_delete=models.CASCADE)
+
+class FoodRequest(models.Model):
+    
+    user_email = models.EmailField()
+    charity = models.ForeignKey(CharityAccount, on_delete=models.CASCADE)
+    order_date = models.DateTimeField()
+    order_size = models.PositiveSmallIntegerField(default=1)
+    
+    unique_auth = models.CharField(max_length=256)
+    expiry_date = models.DateTimeField()
+    has_confirmed = models.BooleanField(default=False)
