@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "rest_framework",
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 OUR_APPS = [
     "api",
@@ -64,6 +65,16 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+     "http://127.0.0.1:9000",
+     "http://localhost:8000",
+     "https://foodbank.mountiny.vercel.app/",
+     "http://foodbank.mountiny.vercel.app/",
+     "*"
 ]
 
 if not ON_SERVER:
