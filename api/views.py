@@ -118,7 +118,7 @@ class CreateCharityAccountView(View):
                 #create address object
                 charityAddress = Address()
                 charityAddress.postcode = postcode,
-                print(geoloc)
+                
                 try:
                     charityAddress.latitude = geoloc[0]
                     charityAddress.longitude = geoloc[1]
