@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from django.http import JsonResponse, HttpResponse
 from app.settings import EMAIL_HOST_USER
 
@@ -155,8 +156,10 @@ class CreateCharityAccountView(View):
             response.content = json.dumps({"error":"Email and password are required for account creation"})
         return response
 
-class CharityListView(View):
+
+class CharityListView(APIView):
     'returns list of all charities'
+#    permission_classes = (IsAuthenticated,)
     def post(self,request):
         response.status_code = 404
         response['message'] = "invalid request"
