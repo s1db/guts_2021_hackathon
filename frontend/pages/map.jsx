@@ -5,7 +5,7 @@ import { useState } from "react";
 import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
-import { getCharityList, getPostcodeInfo } from '../services/foobanksApi.js'
+import { getCharityList, getPostcodeInfo } from '../services/FoobanksApi.js'
 
 const Map = ReactMapboxGl({
   accessToken:

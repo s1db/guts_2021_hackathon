@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import { useAuth } from "../lib/auth";
+import { useAuth } from "../services/auth";
 
 const Ping = () => {
   const { loading, getToken, isAuthenticated } = useAuth();

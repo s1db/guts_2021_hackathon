@@ -1,5 +1,4 @@
 import Link from "next/link";
-// import { useAuth } from "../lib/auth";
 
 const Footer = () => {
   // const { isAuthenticated } = useAuth();

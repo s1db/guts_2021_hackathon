@@ -1,4 +1,4 @@
-import { api } from "./api.js";
+import { api } from "./Api.js";
 import useSWR from 'swr'
 import { getEmitHelpers } from "typescript";
 
