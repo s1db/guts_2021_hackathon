@@ -202,31 +202,23 @@ class GetFoodRequestsUser(View):
 class CreateCharityAccountView(View):
 
     def get(self,request):
-        response = HttpResponse(content_type="application/json")
-        response.status_code = 400
-        response.content = json.dumps({"error":"Invalid Request"})
-        return response
+        
+        return JsonResponse({"error":"Invalid Request"})
     
     def post(self, request):
-        response = HttpResponse(content_type="application/json")
         email = request.POST.get("email","")
         username = email[:email.find("@")]
         password = request.POST.get("password")
         charityname = request.POST.get("charityname","")
         phone = request.POST.get("phone","")
-
         postcode = request.POST.get("postcode")
         if email and password:
             (user,created) = User.objects.get_or_create(username=username)
-            try:
-                CharityAccount.objects.get(email=email)
-                response.status_code=400
-                response.content = json.dumps({"error":"An account already exists with this email"})
-                if created:
-                    User.objects.get(username=user.username).delete()
-                return response
-            except Exception as e:
-                pass
+
+            if len(CharityAccount.objects.filter(email=email))!=0:
+                User.objects.get(username=user.username).delete()
+                return JsonResponse({"error":"This account already exists"})
+
             if created:
                 #create address object
                 charityAddress = Address()
@@ -255,15 +247,11 @@ class CreateCharityAccountView(View):
                     charity = charity,
                     dietary_options = charityDiet
                 )
-                response.status_code = 200
-                response.content = json.dumps({"charity":serialize('json',[charity]), "charity_address":serialize('json',[charityAddress]), "charity_diet_options":serialize('json',[charity_entry])})
+                return JsonResponse({"charity":serialize('json',[charity]), "charity_address":serialize('json',[charityAddress]), "charity_diet_options":serialize('json',[charity_entry])})
             else:
-                response.status_code=400
-                response.content = json.dumps({"error":"An account already exists with this email"})
+                return JsonResponse({"error":"Account already exists"})
         else:
-            response.status_code=400
-            response.content = json.dumps({"error":"Email and password are required for account creation"})
-        return response
+            return JsonResponse({"error":"Email and password are required for account creation"})
 
 class CharityListView(APIView):
     'returns list of all charities'
