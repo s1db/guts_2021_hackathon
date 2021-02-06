@@ -2,7 +2,7 @@ import Layout from "../components/Layout";
 import { useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
-import { useAuth } from "../lib/auth";
+import { useAuth } from "../services/auth";
 
 const signUpApi = async (email, password) => {
   const resp = await fetch("/api/login", {

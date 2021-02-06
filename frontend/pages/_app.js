@@ -1,4 +1,4 @@
-import { AuthProvider } from "../lib/auth";
+import { AuthProvider } from "../services/auth";
 import Head from 'next/head';
 import '../assets/main.css';
 

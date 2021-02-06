@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import { useAuth } from "../lib/auth";
+import { useAuth } from "../services/auth";
 
 const Me = () => {
   const { loading, user } = useAuth();
