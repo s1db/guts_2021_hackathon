@@ -229,20 +229,14 @@ const MapPage = ({ charities }) => {
                 <h3 className="text-2xl pb-4 font-bold text-white">{fb.charity.charityName} {key}</h3>
                 <p className="font-medium text-white pb-8">{fb.address.address_line_1}</p>
                 <div className="flex justify-between items-center">
-                  <div className="flex">
 
-                    <Link href="/foodbank">
-                      <a className="px-3 py-2 mr-4 text-sm bg-accents-1 hover:bg-primary transition-colors duration-200 rounded-lg text-white font-bold">
-                        Details
-                      </a>
-                    </Link>
-                    <Link href="/map">
-                      <a className="px-3 py-2 text-sm bg-accents-1 hover:bg-primary transition-colors duration-200 rounded-lg text-white font-bold">
-                        Locate
-                      </a>
-                    </Link>
-                  </div>
                   <Link href="/map">
+                    <a className="px-3 py-2 text-sm bg-accents-1 hover:bg-primary transition-colors duration-200 rounded-lg text-white font-bold">
+                      Locate
+                    </a>
+                  </Link>
+
+                  <Link href={`/foodbank/${fb.pk}`}>
                     <a className="px-3 py-2 text-sm bg-purple-500 hover:bg-indigo-600 transition-colors duration-200 rounded-lg text-white font-bold">
                       Order package
                     </a>

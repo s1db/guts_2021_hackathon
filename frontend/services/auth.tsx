@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_HOST;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 interface User {
   id: string;
@@ -35,6 +35,18 @@ const fetchNewToken = (): Promise<Response> => {
   const url = makeUrl("/token/refresh/");
   return fetch(url, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include"
+  });
+};
+
+const createUser = (data: any): Promise<Response> => {
+  const url = makeUrl("/createcharityaccount/");
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
     },
@@ -148,6 +160,21 @@ export const AuthProvider = ({ children }: AuthProviderProps): React.ReactNode =
     return resp;
   };
 
+  const signUp = async (data: any): Promise<Response> => {
+    const resp = await createUser(data);
+    console.log('REsp: ', resp)
+    if (resp.ok) {
+      const tokenData = await resp.json();
+      handleNewToken(tokenData);
+      await initUser(tokenData.access);
+    } else {
+      setIsAuthenticated(false);
+      setLoading(true);
+      // Let the page handle the error
+    }
+    return resp;
+  };
+
   const getToken = async (): Promise<string> => {
     // Returns an access token if there's one or refetches a new one
     console.log("Getting access token..");
@@ -184,6 +211,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): React.ReactNode =
     user,
     loading,
     login,
+    signUp,
     logout,
     getToken,
   };
