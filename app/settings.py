@@ -76,6 +76,8 @@ CORS_ALLOWED_ORIGINS = [
      "*"
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 if not ON_SERVER:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.insert(9, "debug_toolbar.middleware.DebugToolbarMiddleware")
