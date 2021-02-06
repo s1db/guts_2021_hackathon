@@ -171,8 +171,8 @@ class CharityListView(View):
             response['message'] = "Ok"
         except Exception as e:
             print(e)
-            response.status_code = 404
-            response['message'] = "invalid request"
+            response.status_code = 200
+            response.content = json.dumps({})
         return response
 
 class charityView(View):
@@ -207,7 +207,6 @@ class charityView(View):
 class TestEmail(View):
 
     def get(self, request):
-        print("test")
         try:
             send_mail(
                 "Hello World",
@@ -219,7 +218,7 @@ class TestEmail(View):
             resp = "sent"
         except Exception as e:
             resp = e
-        return HttpResponse(json.dumps({"Email":"e"}), content_type="application/json")
+        return HttpResponse(json.dumps({"status":str(resp)}), content_type="application/json")
 
 class Ping(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)

@@ -144,11 +144,11 @@ if ON_SERVER:
 
 # EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smpt.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'foodbankfinders@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") 
-EMAIL_PORT = 25
-EMAIL_USE_TLS = False
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 LOGGING = {
@@ -199,4 +199,3 @@ if ON_SERVER:
     # HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
-
