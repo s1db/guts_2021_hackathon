@@ -142,6 +142,14 @@ if ON_SERVER:
     STATICFILES_STORAGE = \
         "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# EMAIL SETTINGS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smpt.gmail.com'
+EMAIL_HOST_USER = 'foodbankfinders@gmail.com'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") 
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 LOGGING = {
     "version": 1,
@@ -191,3 +199,4 @@ if ON_SERVER:
     # HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+

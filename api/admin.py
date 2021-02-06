@@ -13,3 +13,6 @@ class UserAdmin(auth_admin.UserAdmin):
 
 admin.site.register(models.CharityAccount)
 admin.site.register(models.Address)
+admin.site.register(models.CharityDietaryOptions)
+admin.site.register(models.DiertaryRequirements)
+

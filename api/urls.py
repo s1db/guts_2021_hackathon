@@ -20,6 +20,11 @@ urlpatterns = [
     path("token/logout/", jwt_views.Logout.as_view(), name="logout"),
     path("ping/", views.Ping.as_view(), name="ping"),
     path("admin/", admin.site.urls),
+    path("editcharityaccount/", views.EditCharityAccountView.as_view(), name="editcharityaccount"),
+    path("createcharityaccount/", views.CreateCharityAccountView.as_view(), name="createcharityaccount"),
+    path("charitylist/", views.CharityListView.as_view(), name="charitylist"),
+    path("charity/", views.charityView.as_view(), name="viewcharity"),
+    path("email/", views.TestEmail.as_view(), name="email"),
     path("charityaccount/", views.EditCharityAccountView.as_view(), name="charityaccount"),
     path('token-auth/', obtain_auth_token, name='api_token_auth'), 
 ]

@@ -7,10 +7,12 @@ class User(AbstractUser):
 
 class Address(models.Model):
     # address for each charity as a model 
-    address_line_1 = models.CharField(max_length=256)
+    address_line_1 = models.CharField(max_length=256, blank=True)
     address_line_2 = models.CharField(blank=True, max_length=256)
     city = models.CharField(blank=True, max_length=56)
     postcode = models.CharField(max_length=25)
+    longitude = models.DecimalField(max_digits=12, decimal_places=8, default=0.0)
+    latitude = models.DecimalField(max_digits=12, decimal_places=8, default=0.0)
 
 class CharityAccount(models.Model):
 
