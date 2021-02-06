@@ -19,18 +19,18 @@ const Footer = () => {
         <div className="text-sm lg:flex-grow">
 
           <Link href="/privacy">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200 mr-4">
               Privacy
             </a>
           </Link>
           <Link href="/about">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200">
               About
             </a>
           </Link>
         </div>
         <div>
-          <a href="https://www.gla.ac.uk/" target="_blank" className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white font-bold hover:border-transparent hover:text-black hover:bg-secondary transition-colours duration-200 mt-4 lg:mt-0">
+          <a href="https://gutechsoc.com/hackathon" target="_blank" className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white font-bold hover:border-transparent hover:text-black hover:bg-secondary transition-colours duration-200 mt-4 lg:mt-0">
             Made as part of UofG Hackathon 2021 ❤️
           </a>
         </div>

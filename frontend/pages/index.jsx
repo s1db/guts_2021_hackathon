@@ -7,7 +7,7 @@ import { CheckCircledIcon } from '@radix-ui/react-icons'
 const HomePage = () => {
   return (
     <Layout>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center pb-20">
         <h1 className="text-6xl mt-12 mb-12 md:text-7xl lg:text-8xl text-center font-bold w-full">
           <span className="py-5 text-transparent bg-clip-text text-center font-bold bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-600">
             Food is a human right.
@@ -42,8 +42,8 @@ const HomePage = () => {
           </div>
           <div className="relative">
             <Link href="/map">
-              <a href="" className="rounded-lg ml-0 xl:ml-24 px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600">
-                Find nearby foodbank!
+              <a href="" className="rounded-lg ml-0 xl:ml-24 px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 transition-opacity duration-200">
+                Find nearby foodbanks!
               </a>
             </Link>
             {/* <img className="w-2/5" src="iphone.png" alt=""/> */}
