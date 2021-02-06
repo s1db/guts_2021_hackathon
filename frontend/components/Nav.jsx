@@ -23,19 +23,24 @@ const Nav = () => {
         <div className="text-sm lg:flex-grow">
           {isAuthenticated ? (
             <Link href="/me">
-              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200 mr-4">
                 Profile
               </a>
             </Link>
           ) : null}
           <Link href="/ping">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200 mr-4">
               Ping
             </a>
           </Link>
           <Link href="/about">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200 mr-4">
               About
+            </a>
+          </Link>
+          <Link href="/map">
+            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-purple-500 transition-colours duration-200 mr-4">
+              Find!
             </a>
           </Link>
         </div>
@@ -50,7 +55,7 @@ const Nav = () => {
             router.pathname !== "/login" && router.pathname !== "/signup" && (
 
               <Link href="/login">
-                <a className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white font-bold hover:border-transparent hover:text-black hover:bg-secondary transition-colours duration-200 mt-4 lg:mt-0">
+                <a className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white font-bold hover:border-transparent hover:bg-secondary hover:text-black transition-colours duration-200 mt-4 lg:mt-0">
                   Login
                 </a>
               </Link>
