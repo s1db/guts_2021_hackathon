@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.contrib import admin
+from django.db import router
 from django.urls import include, path
-
+from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 from . import jwt_views
 
@@ -18,14 +20,19 @@ urlpatterns = [
     path("token/logout/", jwt_views.Logout.as_view(), name="logout"),
     path("ping/", views.Ping.as_view(), name="ping"),
     path("admin/", admin.site.urls),
+    path("charityaccount/", views.EditCharityAccountView.as_view(), name="charityaccount"),
+    path('token-auth/', obtain_auth_token, name='api_token_auth'), 
 ]
 
 urlpatterns += [
     path("api-auth/", include('rest_framework.urls'))
 ]
 
+
+
 if not settings.ON_SERVER:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+

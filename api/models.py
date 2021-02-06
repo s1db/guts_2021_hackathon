@@ -16,7 +16,7 @@ class CharityAccount(models.Model):
 
     user  = models.ForeignKey(User, on_delete=models.CASCADE)
     charityname = models.CharField(max_length=56)
-    email = models.EmailField()
+    email = models.EmailField(primary_key=True)
     phone = models.CharField(max_length=16,blank=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 

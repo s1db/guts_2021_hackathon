@@ -10,3 +10,6 @@ User = get_user_model()
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
     pass
+
+admin.site.register(models.CharityAccount)
+admin.site.register(models.Address)
