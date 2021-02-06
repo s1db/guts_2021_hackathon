@@ -1,6 +1,5 @@
 import { api } from "./Api.js";
 import useSWR from 'swr'
-import { getEmitHelpers } from "typescript";
 
 // import useAuth from '../contexts/auth.js'
 
@@ -46,34 +45,48 @@ import { getEmitHelpers } from "typescript";
 // }
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-export const getCharityList = () => {
+export const getCharityList = async () => {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const charityListUrl = `${API_URL}/charitylist`;
 
-  console.log("url: ", `${API_URL}/charitylist/`)
-  const { data, error } = useSWR(charityListUrl, fetcher)
+  console.log('Charity: ', charityListUrl)
 
-  console.log('data: ', data)
-  return { data, error }
-  // Load the projects if the user is defined
+  try {
+    const res = await fetch(charityListUrl, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    })//api.get(charityListUrl)
+    return res
+  } catch (error) {
+    console.log(error);
+    return false
+  }
+
+  // console.log("url: ", `${API_URL}/charitylist/`)
+  const data = useSWR(charityListUrl, fetcher)
+
   // const {
   //   data,
   //   isValidating,
-  //   mutate: mutateCharities
   // // } = useSWR((!user || loading) ? false : `${API_URL}/projects?user=${user.id}&_sort=created_at:DESC`, api.get)
-  // } = useSWR(`${API_URL}/charitylist/`, api.get)
-  // return { data, isValidating, mutateCharities }
+  // } = useSWR(charityListUrl, api.get)
+
+  return data
 
 }
 
 export const getPostcodeInfo = async (postcode) => {
+
   try {
 
     const response = await api.get(`http://api.postcodes.io/postcodes/${postcode}`)
-    return response.data.result
 
+    return response.data.result
+    
   } catch (e) {
     return e
   }
