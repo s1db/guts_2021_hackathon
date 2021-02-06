@@ -60,7 +60,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    #"django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -142,6 +142,14 @@ if ON_SERVER:
     STATICFILES_STORAGE = \
         "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# EMAIL SETTINGS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'foodbankfinders@gmail.com'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD") 
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 LOGGING = {
     "version": 1,

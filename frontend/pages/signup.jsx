@@ -139,7 +139,7 @@ const Signup = () => {
             </div>
           </div>
         ) : null}
-        <div className="flex justify-center">
+        <div className="flex justify-center pb-20">
           <div className="pt-8">
             <p className="text-center text-accents-6">
               Do you already have an account?<br />
