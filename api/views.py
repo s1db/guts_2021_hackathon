@@ -109,26 +109,35 @@ class CreateCharityAccountView(View):
                 CharityAccount.objects.get(email=email)
                 response.status_code=400
                 response.content = json.dumps({"error":"An account already exists with this email"})
+                if created:
+                    User.objects.get(username=user.username).delete()
                 return response
             except Exception as e:
                 pass
             if created:
-                # create user 
-                user.set_password(password)
-                charity = CharityAccount()
-                charity.charityname = charityname
-                charity.email = email
-                charity.phone = phone
-                charity.save(commit=False)
-                
                 #create address object
                 charityAddress = Address()
                 charityAddress.postcode = postcode,
-                charityAddress.latitude = geoloc[0]
-                charityAddress.longitude = geoloc[1]
+                print(geoloc)
+                try:
+                    charityAddress.latitude = geoloc[0]
+                    charityAddress.longitude = geoloc[1]
+                except Exception as e:
+                    #error store dummy val
+                    charityAddress.latitude = 12.12050
+                    charityAddress.longitude = 12.12050
                 charityAddress.address_line_1 = request.POST.get("address","")
                 charityAddress.save()
-                charity.save(commit=True)
+
+                # create user 
+                user.set_password(password)
+                charity = CharityAccount()
+                charity.user = user
+                charity.charityname = charityname
+                charity.email = email
+                charity.phone = phone
+                charity.address = charityAddress
+                charity.save()
 
                 # create charity food options
                 charityDiet = DiertaryRequirements.objects.create()
@@ -137,7 +146,7 @@ class CreateCharityAccountView(View):
                     dietary_options = charityDiet
                 )
                 response.status_code = 200
-                response.content = json.dumps({"charity":charity, "charity_address":charityAddress, "charity_diet_options":charity_entry})
+                response.content = json.dumps({"charity":serialize('json',[charity]), "charity_address":serialize('json',[charityAddress]), "charity_diet_options":serialize('json',[charity_entry])})
             else:
                 response.status_code=400
                 response.content = json.dumps({"error":"An account already exists with this email"})

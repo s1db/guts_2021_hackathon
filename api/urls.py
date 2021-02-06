@@ -34,7 +34,6 @@ urlpatterns += [
 ]
 
 
-
 if not settings.ON_SERVER:
     import debug_toolbar
     urlpatterns = [
