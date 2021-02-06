@@ -28,11 +28,11 @@ const Nav = () => {
               </a>
             </Link>
           ) : null}
-          <Link href="/ping">
+          {/* <Link href="/ping">
             <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
               Ping
             </a>
-          </Link>
+          </Link> */}
           <Link href="/about">
             <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
               About

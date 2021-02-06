@@ -23,8 +23,8 @@ const HomePage = () => {
             </a>
           </Link>
         </div> */}
-        <div className="flex flex-col xl:flex-row justify-between items-center mt-20">
-          <div className="flex flex-col justify-start items-start bg-accents-0 rounded-2xl px-6 md:px-8 lg:px-12 py-12">
+        <div className="flex flex-col justify-between items-center mt-20">
+          <div className="flex flex-col justify-start items-start bg-accents-0 rounded-2xl px-6 md:px-8 lg:px-12 pt-12 pb-16">
 
             <h3 className="text-xl md:text-3xl font-extrabold text-purple-500 flex items-center">
               <CheckCircledIcon className="w-8 h-8 mr-4 font-bold" />
@@ -42,11 +42,10 @@ const HomePage = () => {
           </div>
           <div className="relative">
             <Link href="/map">
-              <a href="" className="rounded-lg ml-0 xl:ml-24 px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600">
+              <a href="" className="rounded-lg ml-0 px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600">
                 Find nearby foodbank!
               </a>
             </Link>
-            {/* <img className="w-2/5" src="iphone.png" alt=""/> */}
           </div>
         </div>
 
