@@ -50,3 +50,5 @@ class FoodRequest(models.Model):
     unique_auth = models.CharField(max_length=256)
     expiry_date = models.DateTimeField()
     has_confirmed = models.BooleanField(default=False)
+
+    

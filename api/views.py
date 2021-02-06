@@ -115,15 +115,14 @@ class NewFoodRequest(View):
                 unique_auth = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(256)),
                 expiry_date = timezone.now()+timedelta(hours=2)
             )
-            html_message= f"\
-                Hello,<br/>\
-                Please click the link below to confirm the following food parcel request:<br/><br/>\
-                <a href='http://127.0.0.1:8000/confirm/?auth={food_req.unique_auth}'>Confirm Request</a><br/>\
-                This request will expire at {food_req.expiry_date.strftime('%d-%m-%Y %H:%M')}<br/><br/>\
-                Best Regards,<br/>\
-                Foodbank Finders \
-                "
-            print(html_message)
+            html_message= render_to_string(
+                "confirm_foodrequest.html", 
+                {
+                    "expiry_date": food_req.expiry_date.strftime('%d-%m-%Y %H:%M'),
+                    "token":food_req.unique_auth,
+                    }
+                )
+           
             send_mail(
                 "Food Parcel Confirmation",
                 "",
@@ -138,6 +137,67 @@ class NewFoodRequest(View):
             response.content = json.dumps({"error":"Invalid request, 'email' is missing from request"})
             response.status_code = 400
         return response
+
+class ConfirmFoodRequest(View):
+    
+    def get(self, request):
+        if not request.GET.get("auth"):
+            return JsonResponse({"error":"Auth token missing"})
+        auth_token = request.GET.get("auth")
+        # retrieve associated record for auth token
+        food_request = FoodRequest.objects.filter(unique_auth=auth_token, has_confirmed=False)
+        if len(food_request)==0:
+            return JsonResponse({"error":"Invalid Auth Token"})
+
+        food_request = food_request[0]
+        if food_request.expiry_date < timezone.now():
+            return JsonResponse({"error":"Request has expired"})
+        food_request.has_confirmed = True
+        food_request.expiry_date = food_request.order_date
+        food_request.save()
+
+        html_message= render_to_string(
+                "alert_charity_of_new_request.html", 
+                {
+                    "date": food_request.expiry_date.strftime('%d-%m-%Y'),
+                    "time":food_request.expiry_date.strftime('%H:%M'),
+                    "size":food_request.order_size,
+                    "expiry_date":food_request.expiry_date.strftime('%d-%m-%Y %H:%M'),
+                    }
+                )
+        send_mail(
+            "Food Parcel Request",
+            "",
+            EMAIL_HOST_USER,
+            [str(food_request.charity.email)],
+            fail_silently=False,
+            html_message=html_message
+        )
+        return JsonResponse({"success":"Request confirmed"})
+        
+class GetFoodRequestsCharity(View):
+
+    def get(self, request):
+        email = request.GET.get("email")
+        if not email:
+            return JsonResponse({"error":"No email (charity) supplied"})
+        charity = CharityAccount.objects.filter(email=email)
+        if len(charity)==0:
+            return JsonResponse({"error":"Invalid email address"})
+        
+        charity = charity[0]
+        food_requests = FoodRequest.objects.filter(charity=charity, has_confirmed=True, expiry_date__gte=timezone.now()).order_by("order_date")
+        return JsonResponse(serialize(food_requests))
+
+class GetFoodRequestsUser(View):
+    
+    def get(self, request):
+        email = request.GET.get("email")
+        if not email:
+            return JsonResponse({"error":"No email (charity) supplied"})
+        
+        food_requests = FoodRequest.objects.filter(user_email=email, expiry_date__gte=timezone.now()).order_by("order_date")
+        return JsonResponse(serialize(food_requests))
 
 class CreateCharityAccountView(View):
 
@@ -156,7 +216,6 @@ class CreateCharityAccountView(View):
         phone = request.POST.get("phone","")
 
         postcode = request.POST.get("postcode")
-        geoloc = request.POST.get("geolocation")
         if email and password:
             (user,created) = User.objects.get_or_create(username=username)
             try:
@@ -173,14 +232,11 @@ class CreateCharityAccountView(View):
                 charityAddress = Address()
                 charityAddress.postcode = postcode,
                 
-                try:
-                    charityAddress.latitude = geoloc[0]
-                    charityAddress.longitude = geoloc[1]
-                except Exception as e:
-                    #error store dummy val
-                    charityAddress.latitude = 12.12050
-                    charityAddress.longitude = 12.12050
+                charityAddress.latitude = request.POST.get("latitude",10.00)
+                charityAddress.longitude = request.POST.get("longitude",10.00)
+            
                 charityAddress.address_line_1 = request.POST.get("address","")
+                charityAddress.address_line_2 = request.POST.get("address2","")
                 charityAddress.save()
 
                 # create user 

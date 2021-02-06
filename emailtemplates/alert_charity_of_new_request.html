@@ -1,0 +1,26 @@
+<html>
+    <body>
+        Hello, {{charityname}}<br/>
+        A user would like to place the following request:<br/><br/>
+        <table>
+            <tbody>
+                <tr>
+                    <th>Date:</th>
+                    <td>{{date}}</td>
+                </tr>
+                <tr>
+                    <th>Time:</th>
+                    <td>{{time}}</td>
+                </tr>
+                <tr>
+                    <th>Order size:</th>
+                    <td>{{size}} persons</td>
+                </tr>
+            </tbody>
+        </table>
+        You can accept or reject this request on the <a href='https://foodbank.mountiny.vercel.app/'>app</a>.
+        This request will expire at {{expiry_date}}.<br/><br/>
+        Best Regards,<br/>
+        Foodbank Finders 
+    </body>
+</html>
