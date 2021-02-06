@@ -7,10 +7,9 @@ import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
 import useSWR from 'swr'
-import { api } from "../lib/api.js";
+
 
 import { getCharityList, getPostcodeInfo } from '../lib/foobanksApi.js'
-import { config } from "process";
 
 const Map = ReactMapboxGl({
   accessToken:
