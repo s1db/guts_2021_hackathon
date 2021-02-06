@@ -1,15 +1,20 @@
+from datetime import timedelta
 import json
-from api.models import Address, CharityAccount, CharityDietaryOptions, DiertaryRequirements, User
+import random
+import string
+from api.models import Address, CharityAccount, CharityDietaryOptions, DiertaryRequirements, FoodRequest, User
 from django.utils import timezone
 from django.views import View
 from django.core.serializers import serialize
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
+from django.template.loader import render_to_string
 from rest_framework import generics, response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse, HttpResponse
 from app.settings import EMAIL_HOST_USER
 
+date_format = '%Y-%m-%d %H:%M:%S'
 
 from . import serializers
 
@@ -85,6 +90,54 @@ class EditCharityAccountView(View):
                 response['message'] = "Account does not exist"
         return response
 
+class NewFoodRequest(View):
+
+    def post(self, request):
+        response = HttpResponse(content_type="application/json")
+        if request.POST.get("email"):
+            email = request.POST.get("email")
+            charity_email = request.POST.get("charity_email")
+            order_date = request.POST.get("order_date")
+            print(order_date)
+            order_size = request.POST.get("order_size")
+
+            if len(CharityAccount.objects.filter(email=charity_email)) == 0:
+                response.content = json.dumps({"error":"Invalid request, no charity associated with this email"})
+                response.status_code = 400
+                return response
+            
+            food_req = FoodRequest.objects.create(
+                user_email = email,
+                charity = CharityAccount.objects.get(email=charity_email),
+                order_date = timezone.make_aware(timezone.datetime.strptime(order_date, date_format)),
+                order_size = order_size,
+                has_confirmed = False,
+                unique_auth = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(256)),
+                expiry_date = timezone.now()+timedelta(hours=2)
+            )
+            html_message= f"\
+                Hello,<br/>\
+                Please click the link below to confirm the following food parcel request:<br/><br/>\
+                <a href='http://127.0.0.1:8000/confirm/?auth={food_req.unique_auth}'>Confirm Request</a><br/>\
+                This request will expire at {food_req.expiry_date.strftime('%d-%m-%Y %H:%M')}<br/><br/>\
+                Best Regards,<br/>\
+                Foodbank Finders \
+                "
+            print(html_message)
+            send_mail(
+                "Food Parcel Confirmation",
+                "",
+                EMAIL_HOST_USER,
+                [str(food_req.user_email)],
+                fail_silently=False,
+                html_message=html_message
+            )
+            response.content = json.dumps({"success":"Request Created"})
+            response.status_code = 200
+        else:
+            response.content = json.dumps({"error":"Invalid request, 'email' is missing from request"})
+            response.status_code = 400
+        return response
 class CreateCharityAccountView(View):
 
     def get(self,request):
@@ -158,6 +211,7 @@ class CreateCharityAccountView(View):
 class CharityListView(View):
     'returns list of all charities'
     def post(self,request):
+        response = HttpResponse(content_type="application/json")
         response.status_code = 404
         response['message'] = "invalid request"
         return response

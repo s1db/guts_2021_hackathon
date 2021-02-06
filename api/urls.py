@@ -27,6 +27,7 @@ urlpatterns = [
     path("email/", views.TestEmail.as_view(), name="email"),
     path("charityaccount/", views.EditCharityAccountView.as_view(), name="charityaccount"),
     path('token-auth/', obtain_auth_token, name='api_token_auth'), 
+    path('newfoodrequest/', views.NewFoodRequest.as_view(), name="newfoodrequest")
 ]
 
 urlpatterns += [
