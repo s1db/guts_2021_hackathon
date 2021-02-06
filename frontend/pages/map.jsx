@@ -80,20 +80,20 @@ const MapPage = ({ charities }) => {
   const [postcode, setPostcode] = useState("")
   const [postcodeError, setPostcodeError] = useState(null)
   const [filters, setFilters] = useState(diets)
-  let formatted = []
+  // let formatted = []
 
-  Object.keys(charities).map((email) => {
-    let charity = {
-      pk: JSON.parse(charities[email].address)[0].pk,
-      email,
-      address: JSON.parse(charities[email].address)[0].fields,
-      charity: JSON.parse(charities[email].charity)[0].fields,
-      diet_options: JSON.parse(charities[email].diet_options)[0].fields
-    }
-    formatted.push(charity)
-  })
+  // Object.keys(charities).map((email) => {
+  //   let charity = {
+  //     pk: JSON.parse(charities[email].address)[0].pk,
+  //     email,
+  //     address: JSON.parse(charities[email].address)[0].fields,
+  //     charity: JSON.parse(charities[email].charity)[0].fields,
+  //     diet_options: JSON.parse(charities[email].diet_options)[0].fields
+  //   }
+  //   formatted.push(charity)
+  // })
 
-  console.log('charities: ', formatted)
+  console.log('charities: ', charities)
 
   const handleFiltersChange = (name) => {
 
@@ -160,7 +160,7 @@ const MapPage = ({ charities }) => {
           }}
         >
           {
-            formatted.map((fb, key) => (
+            charities.map((fb, key) => (
               <Marker
                 key={key}
                 coordinates={[fb.address.longitude,fb.address.latitude]}
@@ -224,7 +224,7 @@ const MapPage = ({ charities }) => {
 
           <div className="w-full flex flex-col justify-start px-4 py-4">
           {
-            formatted.map((fb, key) => (
+            charities.map((fb, key) => (
               <div key={key} className="w-full mb-4 p-4 relative bg-accents-0 rounded-lg cursor-pointer" onClick={handleListItemClick}>
                 <h3 className="text-2xl pb-4 font-bold text-white">{fb.charity.charityName} {key}</h3>
                 <p className="font-medium text-white pb-8">{fb.address.address_line_1}</p>
@@ -277,9 +277,22 @@ export async function getServerSideProps(context) {
 
   const charities = await res.json()
 
+  let formatted = []
+
+  Object.keys(charities).map((email) => {
+    let charity = {
+      pk: JSON.parse(charities[email].address)[0].pk,
+      email,
+      address: JSON.parse(charities[email].address)[0].fields,
+      charity: JSON.parse(charities[email].charity)[0].fields,
+      diet_options: JSON.parse(charities[email].diet_options)[0].fields
+    }
+    formatted.push(charity)
+  })
+
   return {
     props: {
-      charities
+      charities: formatted
     }, // will be passed to the page component as props
   }
 }

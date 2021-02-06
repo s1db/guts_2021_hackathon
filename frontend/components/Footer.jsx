@@ -7,7 +7,7 @@ const Footer = () => {
       <Link href="/">
         <a>
           <div className="flex items-center flex-shrink-0 text-white mr-6">
-            <img src="logo.png" className="h-12 mr-3" />
+            <img src="/logo.png" className="h-12 mr-3" />
             <span className="font-bold text-xl tracking-tight">
               Food Bank
             </span>
