@@ -42,7 +42,7 @@ const HomePage = () => {
           </div>
           <div className="relative">
             <Link href="/map">
-              <a href="" className="rounded-lg ml-0 xl:ml-24 px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 transition-opacity duration-200">
+              <a href="" className="rounded-lg px-8 py-6 text-lg sm:text-xl lg:text-2xl font-extrabold uppercase text-center font-bold bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-90 transition-opacity duration-200">
                 Find nearby foodbanks!
               </a>
             </Link>
