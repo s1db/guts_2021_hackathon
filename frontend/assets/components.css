@@ -1,3 +1,6 @@
 .fit {
-  min-height: calc(100vh - 88px);
+  min-height: calc(100vh - 96px);
+}
+.max-fit {
+  max-height: calc(100vh - 96px);
 }

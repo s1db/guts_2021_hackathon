@@ -13,7 +13,7 @@ const Nav = () => {
         <a>
           <div className="flex items-center flex-shrink-0 text-white mr-6">
             <img src="logo.png" className="h-12 mr-3" />
-            <span className="font-bold text-xl tracking-tight">
+            <span className="font-bold text-2xl tracking-tight">
               Food Bank
             </span>
           </div>
@@ -33,13 +33,16 @@ const Nav = () => {
               Ping
             </a>
           </Link> */}
+          <h4 className="text-sm">
+            Easier access to food for everyone.
+          </h4>
+        </div>
+        <div>
           <Link href="/about">
-            <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+            <a className="block mt-4 mr-8 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
               About
             </a>
           </Link>
-        </div>
-        <div>
           {isAuthenticated ? (
             <Link href="/logout">
               <a className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white font-bold hover:border-transparent hover:text-black hover:bg-secondary transition-colours duration-200 mt-4 lg:mt-0">

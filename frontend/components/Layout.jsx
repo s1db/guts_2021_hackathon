@@ -1,14 +1,20 @@
 import Nav from "./Nav";
 import Footer from "./Footer";
+import cn from "classnames";
 
-const Layout = ({children}) => {
+const Layout = ({full = false, children}) => {
   return (
     <div>
       <Nav />
-      <div className="fit max-w-7xl mx-auto px-6">
+      <div className={cn("fit mx-auto", !full && "px-6 max-w-7xl")}>
         {children}
       </div>
-      <Footer />
+      {
+        !full && (
+          <Footer />
+        )
+      }
+      
     </div>
   )
 }
