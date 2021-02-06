@@ -22,7 +22,13 @@ urlpatterns = [
     path("editcharityaccount/", views.EditCharityAccountView.as_view(), name="editcharityaccount"),
     path("createcharityaccount/", views.CreateCharityAccountView.as_view(), name="createcharityaccount"),
     path("charitylist/", views.CharityListView.as_view(), name="charitylist"),
-    path("charity/", views.charityView.as_view(), name="viewcharity")
+    path("charity/", views.charityView.as_view(), name="viewcharity"),
+    path("createuseraccount/", views.CreateUserAccountView.as_view(), name="createuseraccount"),
+    path("setuserdietarypreferences/", views.SetUserDietaryPreferences.as_view(), name="setuserdietarypreferences"),
+    path("edituserprofile/", views.EditUserProfile.as_view(), name="edituserprofile"),
+    path("singlesignon/", views.SingleSignOn.as_view(), name="singlesignon"),
+    path("userlogin/", views.UserLogin.as_view(), name="userlogin"),
+
 ]
 
 urlpatterns += [
