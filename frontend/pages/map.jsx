@@ -1,14 +1,10 @@
 import Layout from "../components/Layout";
 import Link from "next/link";
-
 import FilterLabel from "../components/FilterLabel";
 import { useState } from "react";
 import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
-import useSWR from 'swr'
-
-
 import { getCharityList, getPostcodeInfo } from '../lib/foobanksApi.js'
 
 const Map = ReactMapboxGl({
