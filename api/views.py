@@ -207,14 +207,19 @@ class charityView(View):
 class TestEmail(View):
 
     def get(self, request):
-        send_mail(
-            "Hello World",
-            "This is a message",
-            EMAIL_HOST_USER,
-            ['nathanwelsh8@gmail.com'],
-            fail_silently=False
-        )
-        return HttpResponse(json.dumps({"Email":"sent?"}), content_type="application/json")
+        print("test")
+        try:
+            send_mail(
+                "Hello World",
+                "This is a message",
+                EMAIL_HOST_USER,
+                ['nathanwelsh8@gmail.com'],
+                fail_silently=False
+            )
+            resp = "sent"
+        except Exception as e:
+            resp = e
+        return HttpResponse(json.dumps({"Email":"e"}), content_type="application/json")
 
 class Ping(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
