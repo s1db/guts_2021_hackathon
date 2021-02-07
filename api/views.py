@@ -211,8 +211,8 @@ class CreateCharityAccountView(View):
                 charityAddress = Address()
                 charityAddress.postcode = postcode,
                 
-                charityAddress.latitude = request.POST.get("latitude",10.00)
-                charityAddress.longitude = request.POST.get("longitude",10.00)
+                charityAddress.latitude = float(equest.POST.get("latitude",10.00))
+                charityAddress.longitude = float(request.POST.get("longitude",10.00))
             
                 charityAddress.address_line_1 = request.POST.get("address","")
                 charityAddress.address_line_2 = request.POST.get("address2","")
