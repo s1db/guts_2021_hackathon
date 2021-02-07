@@ -27,12 +27,10 @@ ON_SERVER = env("ON_SERVER", default=True)
 ALLOWED_HOSTS = ["*", "localhost","127.0.0.1"]
 CORS_ALLOW_CREDENTIALS = True
 
-# if ON_SERVER:
-#     CORS_ORIGIN_REGEX_WHITELIST = env.list(
-#         "CORS_ORIGIN_REGEX_WHITELIST", default=[]
-#     )
-# else:
-#     CORS_ORIGIN_ALLOW_ALL = True
+if ON_SERVER:
+    CORS_ORIGIN_REGEX_WHITELIST = ['*', "localhost"]
+else:
+    CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -46,7 +44,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS = [
-    "corsheaders",
+    #"corsheaders",
     "django_extensions",
     "rest_framework",
     'rest_framework.authtoken',
@@ -59,7 +57,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OUR_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    #"corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     #"django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
