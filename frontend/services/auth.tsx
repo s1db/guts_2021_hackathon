@@ -44,11 +44,23 @@ const fetchNewToken = (): Promise<Response> => {
 
 const createUser = (data: any): Promise<Response> => {
   const url = makeUrl("/createcharityaccount/");
+  let formData = new FormData()
+
+  formData.append("address", data.address)
+  formData.append("address2", data.address2)
+  formData.append("postcode", data.postcode)
+  formData.append("latitude", data.latitude)
+  formData.append("longitude", data.longitude)
+  formData.append("email", data.email)
+  formData.append("password", data.password)
+  formData.append("charityname", data.charityname)
+  formData.append("phone", data.phone)
+
   return fetch(url, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: formData,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
     credentials: "include"
   });

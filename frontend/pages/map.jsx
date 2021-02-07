@@ -1,7 +1,7 @@
 import Layout from "../components/Layout";
 import Link from "next/link";
 import FilterLabel from "../components/FilterLabel";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
@@ -15,16 +15,16 @@ const Map = ReactMapboxGl({
 
 const foodbanks = [
   {
-    name: "Foodbank",
-    address: "3 Dalnair Street, Glasgow",
-    postcode: "G3 8SD",
+    name: "Blawarthill Parish Church Hall",
+    address: "33 Kinstone Avenue, Scotstoun, Glasgow",
+    postcode: "G14 0EB",
     geo: [-4.2858, 55.8698]
 
   },
   {
-    name: "Foodbank",
-    address: "3 Dalnair Street, Glasgow",
-    postcode: "G3 8SD",
+    name: "Elim Church",
+    address: "42 Inglefield Street, Glasgow",
+    postcode: "G42 7AT",
     geo: [-4.2758, 55.8698]
 
   },
@@ -93,6 +93,8 @@ const MapPage = ({ charities }) => {
   //   formatted.push(charity)
   // })
 
+  const mapRef = useRef()
+
   console.log('charities: ', charities)
 
   const handleFiltersChange = (name) => {
@@ -144,6 +146,15 @@ const MapPage = ({ charities }) => {
     setPostcodeError(null);
     setPostcode(target)
   }
+
+  const handleFlyTo = (id) => {
+    console.log(id)
+    mapRef.current.flyTo({center: [
+      -74.5 + (Math.random() - 0.5) * 10,
+      40 + (Math.random() - 0.5) * 10
+      ],
+      essential: true})
+  }
   
   
   return (
@@ -158,6 +169,7 @@ const MapPage = ({ charities }) => {
             height: '100%',
             width: '100%'
           }}
+          ref={mapRef.current}
         >
           {
             charities.map((fb, key) => (
@@ -230,11 +242,13 @@ const MapPage = ({ charities }) => {
                 <p className="font-medium text-white pb-8">{fb.address.address_line_1}</p>
                 <div className="flex justify-between items-center">
 
-                  <Link href="/map">
-                    <a className="px-3 py-2 text-sm bg-accents-1 hover:bg-primary transition-colors duration-200 rounded-lg text-white font-bold">
-                      Locate
-                    </a>
-                  </Link>
+
+                  <button 
+                    onClick={() => handleFlyTo(key)}
+                    className="px-3 py-2 text-sm bg-accents-1 hover:bg-primary transition-colors duration-200 rounded-lg text-white font-bold">
+                    Locate
+                  </button>
+
 
                   <Link href={`/foodbank/${fb.pk}`}>
                     <a className="px-3 py-2 text-sm bg-purple-500 hover:bg-indigo-600 transition-colors duration-200 rounded-lg text-white font-bold">

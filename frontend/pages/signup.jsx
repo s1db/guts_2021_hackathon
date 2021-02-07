@@ -49,7 +49,7 @@ const Signup = () => {
       password ,
       charityname: name ,
       postcode: postcodeResult.postcode,
-      latitude: postcodeResult.latutide,
+      latitude: postcodeResult.latitude,
       longitude: postcodeResult.longitude,
       address: address1,
       address2: address2,
@@ -184,7 +184,7 @@ const Signup = () => {
               required={true}
               value={address1}
               onChange={(e) =>
-                setAddress2(e.target.value)
+                setAddress1(e.target.value)
               }
             />
         </div>

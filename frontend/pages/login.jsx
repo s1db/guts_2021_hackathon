@@ -26,6 +26,7 @@ const Login = () => {
     event
   ) => {
     event.preventDefault();
+    
     setErrorMessage("");
     try {
       const resp = await login(username, password);
