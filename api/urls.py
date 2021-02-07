@@ -31,6 +31,12 @@ urlpatterns = [
     path('confirmfoodrequest/', views.ConfirmFoodRequest.as_view(), name="confirmfoodrequest"),
     path('getcharityfoodrequests/', views.GetFoodRequestsCharity.as_view(), name="getcharityfoodrequests"),
     path('getuserfoodrequests/', views.GetFoodRequestsUser.as_view(), name="getuserfoodrequests"),
+    #user urls    
+    path("createuseraccount/", views.CreateUserAccountView.as_view(), name="createuseraccount"),
+    path("setuserdietarypreferences/", views.SetUserDietaryPreferences.as_view(), name="setuserdietarypreferences"),
+    path("edituserprofile/", views.EditUserProfile.as_view(), name="edituserprofile"),
+    path("singlesignon/", views.SingleSignOn.as_view(), name="singlesignon"),
+    path("userlogin/", views.UserLogin.as_view(), name="userlogin"),
 
 ]
 
