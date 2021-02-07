@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import { useAuth } from "../services/auth";
 
@@ -20,27 +20,25 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const { loading, isAuthenticated, login } = useAuth();
+  const router = useRouter()
+
+  useEffect(() => {
+
+    const auth = window.localStorage.getItem("auth");
+
+    if (auth === "true") {
+      router.push("/me")
+    }
+
+  },[])
 
   const handleSubmit = async (
     event
   ) => {
     event.preventDefault();
-    
-    setErrorMessage("");
-    try {
-      const resp = await login(username, password);
-      if (resp.status === 401) {
-        setErrorMessage("Invalid login credentials");
-      }
-    } catch (error) {
-      console.error(error);
-      // TODO: actually parse api 400 error messages
-      setErrorMessage(error.message);
-    }
+    window.localStorage.setItem("auth", true)
+    router.push("/me")
   };
-
-  if (!loading && isAuthenticated) Router.push("/");
 
   return (
     <Layout>

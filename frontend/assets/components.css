@@ -1,6 +1,13 @@
 .fit {
-  min-height: calc(100vh - 96px);
+  min-height: calc(40vh);
+  @screen lg {
+    min-height: calc(100vh - 96px);
+  }
 }
 .max-fit {
   max-height: calc(100vh - 96px);
+}
+
+.max-fit-half {
+  max-height: calc(50vh);
 }

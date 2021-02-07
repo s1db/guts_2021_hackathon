@@ -1,7 +1,7 @@
 import Layout from "../components/Layout";
 import { useState } from "react";
 import Link from "next/link";
-import Router from "next/router";
+import Router, {useRouter} from "next/router";
 import { useAuth } from "../services/auth";
 import cn from "classnames";
 import { getPostcodeInfo } from '../services/FoobanksApi.js'
@@ -30,6 +30,8 @@ const Signup = () => {
   const [phone, setPhone] = useState("")
   const [postcodeError, setPostcodeError] = useState(null)
 
+  const router = useRouter()
+
   const handleSubmit = async (
     event
   ) => {
@@ -37,13 +39,10 @@ const Signup = () => {
     setErrorMessage("");
 
     const postcodeResult = await handleSearchPostcode()
-    console.log('PSč result: ', postcodeResult)
     if (!postcodeResult) {
       return
     }
 
-
-    console.log(postcodeResult)
     const data = {
       email ,
       password ,
@@ -56,16 +55,36 @@ const Signup = () => {
       phone,
     }
 
-    try {
-      const resp = await signUp(data);
-      if (resp.status === 401) {
-        setErrorMessage("Invalid login credentials");
-      }
-    } catch (error) {
-      console.error(error);
-      // TODO: actually parse api 400 error messages
-      setErrorMessage(error.message);
-    }
+    window.localStorage.setItem("user", JSON.stringify(data))
+    window.localStorage.setItem("auth", true)
+    router.push("/me")
+    return
+
+    // let formData = new FormData()
+
+    // formData.append("email", "youremail@gmail.com")
+
+    // const response = await fetch('https://send-foods.herokuapp.com/singlesignon', {
+    //   method: "POST",
+    //   body: formData,
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    //   credentials: "include"
+    // })
+
+    // console.log('response: ', response)
+
+    // try {
+    //   const resp = await signUp(data);
+    //   if (resp.status === 401) {
+    //     setErrorMessage("Invalid login credentials");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   // TODO: actually parse api 400 error messages
+    //   setErrorMessage(error.message);
+    // }
   };
 
 

@@ -1,7 +1,7 @@
 import Layout from "../components/Layout";
 import Link from "next/link";
 import FilterLabel from "../components/FilterLabel";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import cn from "classnames";
@@ -15,33 +15,38 @@ const Map = ReactMapboxGl({
 
 const foodbanks = [
   {
-    name: "Blawarthill Parish Church Hall",
+    pk: 1,
+    name: "Glasgow NW Foodbank",
     address: "33 Kinstone Avenue, Scotstoun, Glasgow",
     postcode: "G14 0EB",
-    geo: [-4.2858, 55.8698]
+    geo: [-4.363900, 55.885257]
 
   },
   {
-    name: "Elim Church",
+    pk: 2,
+    name: "Glasgow SE Foodbank",
     address: "42 Inglefield Street, Glasgow",
     postcode: "G42 7AT",
-    geo: [-4.2758, 55.8698]
+    geo: [-4.256667, 55.840181]
 
   },
   {
-    name: "Foodbank",
+    pk: 3,
+    name: "Glasgow NE Foodbank",
     address: "3 Dalnair Street, Glasgow",
-    postcode: "G3 8SD",
-    geo: [-4.2758, 55.8798]
+    postcode: "G31 4NA",
+    geo: [-4.198709, 55.848159]
 
   },
   {
-    name: "Foodbank",
-    address: "3 Dalnair Street, Glasgow",
-    postcode: "G3 8SD",
-    geo: [-4.2858, 55.8798]
+    pk: 5,
+    name: "Drumchapel Foodbank",
+    address: "Ladyloan Place Unit 9, Glasgow",
+    postcode: "G15 8LB",
+    geo: [-4.379215, 55.917106]
 
   }
+
 ]
 
 
@@ -80,6 +85,8 @@ const MapPage = ({ charities }) => {
   const [postcode, setPostcode] = useState("")
   const [postcodeError, setPostcodeError] = useState(null)
   const [filters, setFilters] = useState(diets)
+
+  const [mapCenter, setMapCenter] = useState([-4.2858, 55.8698])
   // let formatted = []
 
   // Object.keys(charities).map((email) => {
@@ -93,9 +100,6 @@ const MapPage = ({ charities }) => {
   //   formatted.push(charity)
   // })
 
-  const mapRef = useRef()
-
-  console.log('charities: ', charities)
 
   const handleFiltersChange = (name) => {
 
@@ -129,6 +133,7 @@ const MapPage = ({ charities }) => {
     try {
 
       const result = await getPostcodeInfo(postcode)
+      console.log('lt: ', [result.longitude, result.latitude])
 
       if (result.postcode) {
 
@@ -149,34 +154,31 @@ const MapPage = ({ charities }) => {
 
   const handleFlyTo = (id) => {
     console.log(id)
-    mapRef.current.flyTo({center: [
-      -74.5 + (Math.random() - 0.5) * 10,
-      40 + (Math.random() - 0.5) * 10
-      ],
-      essential: true})
+
+    setMapCenter([foodbanks[id].geo[0], foodbanks[id].geo[1]])
+
   }
   
   
   return (
     <Layout full={true}>
-      <div className="h-full fit max-fit flex flex-col md:flex-row">
+      <div className="h-full fit max-fit flex flex-col lg:flex-row">
        
         <Map
           style="mapbox://styles/mapbox/streets-v9"
-          className="fit"
-          center={[-4.2858, 55.8698]}
+          className="fit w-full"
+          center={mapCenter}
           containerStyle={{
             height: '100%',
             width: '100%'
           }}
-          ref={mapRef.current}
         >
           {
-            charities.map((fb, key) => (
+            foodbanks.map((fb, key) => (
               <Marker
                 key={key}
-                coordinates={[fb.address.longitude,fb.address.latitude]}
-                onClick={handleMarkerClick}
+                coordinates={[fb.geo[0], fb.geo[1]]}
+                onClick={() => handleFlyTo(key)}
                 anchor="bottom" >
                 <img src={"marker.svg"}/>
               </Marker>
@@ -184,7 +186,7 @@ const MapPage = ({ charities }) => {
           }
          
         </Map>
-        <aside className="w-2/5 max-h-full overflow-scroll fit flex flex-col justify-start items-center">
+        <aside className="w-full lg:w-2/5 max-h-full overflow-scroll lg:fit flex flex-col justify-start items-center">
 
           <div className="w-full py-8 px-4 relative bg-primary-2 rounded-lg">
             <h2 className="text-3xl font-extrabold pb-8">
@@ -236,10 +238,10 @@ const MapPage = ({ charities }) => {
 
           <div className="w-full flex flex-col justify-start px-4 py-4">
           {
-            charities.map((fb, key) => (
+            foodbanks.map((fb, key) => (
               <div key={key} className="w-full mb-4 p-4 relative bg-accents-0 rounded-lg cursor-pointer" onClick={handleListItemClick}>
-                <h3 className="text-2xl pb-4 font-bold text-white">{fb.charity.charityName} {key}</h3>
-                <p className="font-medium text-white pb-8">{fb.address.address_line_1}</p>
+                <h3 className="text-2xl pb-4 font-bold text-white">{fb.name}</h3>
+                <p className="font-medium text-white pb-8">{fb.address}</p>
                 <div className="flex justify-between items-center">
 
 
