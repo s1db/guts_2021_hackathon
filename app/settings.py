@@ -1,7 +1,7 @@
 from datetime import timedelta
 import os
 import environ
-
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -65,21 +65,22 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
-     "http://127.0.0.1:9000",
-     "http://127.0.0.1:4000",
-     "http://localhost:8000",
-     "http://localhost:4000",
-     "https://foodbank.mountiny.vercel.app/",
-     "http://foodbank.mountiny.vercel.app/",
-     "*"
+    "*",
+    "http://127.0.0.1:9000",
+    "http://127.0.0.1:4000",
+    "http://localhost:8000",
+    "http://localhost:4000",
+    "https://foodbank.mountiny.vercel.app/",
+    "http://foodbank.mountiny.vercel.app/",
+    "*"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 if not ON_SERVER:
     INSTALLED_APPS.append("debug_toolbar")
@@ -192,6 +193,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+            'stream': sys.stdout
         },
     },
     "loggers": {

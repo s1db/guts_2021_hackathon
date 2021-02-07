@@ -31,21 +31,16 @@ class EditCharityAccountView(View):
 
     def post(self,request):
         permission_classes = (IsAuthenticated,)
-        response = HttpResponse(content_type="application/json")
         
         # check edit_charity in post request
         if not request.user.is_authenticated:
-            response.status_code = 401
-            response.content =  json.dumps({"error":"Authentication Required"})
-            return response
+            return HttpResponse({"error":"Authentication Required"})
         
         charity_account = None
         try:
             charity_account = CharityAccount.objects.get(email = request.POST.get("email"))
         except Exception as e:
-            print(e)
-            response.status_code = 404
-            response.content =json.dumps({"error":"User not found"})
+            return JsonResponse({"error":"User not found"})
         finally:
             if charity_account:
                 user = authenticate(username=charity_account.user.username, password= request.POST.get("password"))
@@ -55,18 +50,16 @@ class EditCharityAccountView(View):
 
                     # update location info
                     charity_account.address.postcode = request.POST.get("postcode")
-                    geolocation = request.POST.get("geolocation")
-                    charity_account.address.longitude = geolocation[0]
-                    charity_account.address.latitude = geolocation[1]
+                    longitude = request.POST.get("longitude")
+                    latitude = request.POST.get("latitude")
+                    charity_account.address.longitude = longitude
+                    charity_account.address.latitude = latitude
 
                     charity_account.save()
-                    response.status_code = 200
-                    response.content = {"Success":"User details updated"}
+                    return JsonResponse({"success":"User details updated"})
                 else:
-                    response.status_code = 401
-                    response.content =  {"error":"Invalid Credentials"}
-                    
-        return response
+                    return JsonResponse({"error":"Invalid Credentials"})
+
 
     def get(self, request):
         # return charity data
@@ -94,7 +87,7 @@ class EditCharityAccountView(View):
 class NewFoodRequest(View):
 
     def post(self, request):
-        response = HttpResponse(content_type="application/json")
+       
         if request.POST.get("email"):
             email = request.POST.get("email")
             charity_email = request.POST.get("charity_email")
@@ -102,9 +95,7 @@ class NewFoodRequest(View):
             order_size = request.POST.get("order_size")
 
             if len(CharityAccount.objects.filter(email=charity_email)) == 0:
-                response.content = json.dumps({"error":"Invalid request, no charity associated with this email"})
-                response.status_code = 400
-                return response
+               return JsonResponse({"error":"Invalid request, no charity associated with this email"})
             
             food_req = FoodRequest.objects.create(
                 user_email = email,
@@ -122,7 +113,6 @@ class NewFoodRequest(View):
                     "token":food_req.unique_auth,
                     }
                 )
-           
             send_mail(
                 "Food Parcel Confirmation",
                 "",
@@ -131,12 +121,9 @@ class NewFoodRequest(View):
                 fail_silently=False,
                 html_message=html_message
             )
-            response.content = json.dumps({"success":"Request Created"})
-            response.status_code = 200
+            return JsonResponse({"success":"Request Created"})
         else:
-            response.content = json.dumps({"error":"Invalid request, 'email' is missing from request"})
-            response.status_code = 400
-        return response
+            return JsonResponse({"error":"Invalid request, 'email' is missing from request"})
 
 class ConfirmFoodRequest(View):
     
@@ -202,38 +189,30 @@ class GetFoodRequestsUser(View):
 class CreateCharityAccountView(View):
 
     def get(self,request):
-        response = HttpResponse(content_type="application/json")
-        response.status_code = 400
-        response.content = json.dumps({"error":"Invalid Request"})
-        return response
+        
+        return JsonResponse({"error":"Invalid Request"})
     
     def post(self, request):
-        response = HttpResponse(content_type="application/json")
         email = request.POST.get("email","")
         username = email[:email.find("@")]
         password = request.POST.get("password")
         charityname = request.POST.get("charityname","")
         phone = request.POST.get("phone","")
-
         postcode = request.POST.get("postcode")
         if email and password:
             (user,created) = User.objects.get_or_create(username=username)
-            try:
-                CharityAccount.objects.get(email=email)
-                response.status_code=400
-                response.content = json.dumps({"error":"An account already exists with this email"})
-                if created:
-                    User.objects.get(username=user.username).delete()
-                return response
-            except Exception as e:
-                pass
+
+            if len(CharityAccount.objects.filter(email=email))!=0:
+                User.objects.get(username=user.username).delete()
+                return JsonResponse({"error":"This account already exists"})
+
             if created:
                 #create address object
                 charityAddress = Address()
                 charityAddress.postcode = postcode,
                 
-                charityAddress.latitude = request.POST.get("latitude",10.00)
-                charityAddress.longitude = request.POST.get("longitude",10.00)
+                charityAddress.latitude = float(equest.POST.get("latitude",10.00))
+                charityAddress.longitude = float(request.POST.get("longitude",10.00))
             
                 charityAddress.address_line_1 = request.POST.get("address","")
                 charityAddress.address_line_2 = request.POST.get("address2","")
@@ -255,15 +234,11 @@ class CreateCharityAccountView(View):
                     charity = charity,
                     dietary_options = charityDiet
                 )
-                response.status_code = 200
-                response.content = json.dumps({"charity":serialize('json',[charity]), "charity_address":serialize('json',[charityAddress]), "charity_diet_options":serialize('json',[charity_entry])})
+                return JsonResponse({"charity":serialize('json',[charity]), "charity_address":serialize('json',[charityAddress]), "charity_diet_options":serialize('json',[charity_entry])})
             else:
-                response.status_code=400
-                response.content = json.dumps({"error":"An account already exists with this email"})
+                return JsonResponse({"error":"Account already exists"})
         else:
-            response.status_code=400
-            response.content = json.dumps({"error":"Email and password are required for account creation"})
-        return response
+            return JsonResponse({"error":"Email and password are required for account creation"})
 
 class CharityListView(APIView):
     'returns list of all charities'
@@ -297,14 +272,9 @@ class CharityListView(APIView):
 
 class charityView(View):
     def get(self, request):
-        # return charity data
-        response = HttpResponse(content_type="application/json")
-        response['message'] = ""
-        response.content = {}
         #check id present
         if not request.GET.get("email"):
-            response.status_code = 400
-            response['message'] = "'id' missing from request"
+            return JsonResponse({"error":"'id' missing from request"})
         else:
             email = request.GET.get("email")
             try: # check email exists
@@ -315,14 +285,10 @@ class charityView(View):
                         "address":serialize('json',[charity.address]),
                         "diet_options":serialize('json',[CharityDietaryOptions.objects.get(charity=charity).dietary_options])
                     }
-                response.content = json.dumps(charities)
-                response.status_code = 200
-                response['message'] = "Ok"
+                return JsonResponse(charities)
             except Exception as e:
                 print(e)
-                response.status_code = 404
-                response['message'] = "Account does not exist"
-        return response
+                return JsonResponse({"error":"Account does not exist"})
 
 class TestEmail(View):
 
