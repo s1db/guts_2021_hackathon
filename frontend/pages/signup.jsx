@@ -55,10 +55,10 @@ const Signup = () => {
       phone,
     }
 
-    window.localStorage.setItem("user", JSON.stringify(data))
-    window.localStorage.setItem("auth", true)
-    router.push("/me")
-    return
+    // window.localStorage.setItem("user", JSON.stringify(data))
+    // window.localStorage.setItem("auth", true)
+    // router.push("/me")
+    // return
 
     // let formData = new FormData()
 
@@ -75,16 +75,16 @@ const Signup = () => {
 
     // console.log('response: ', response)
 
-    // try {
-    //   const resp = await signUp(data);
-    //   if (resp.status === 401) {
-    //     setErrorMessage("Invalid login credentials");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   // TODO: actually parse api 400 error messages
-    //   setErrorMessage(error.message);
-    // }
+    try {
+      const resp = await signUp(data);
+      if (resp.status === 401) {
+        setErrorMessage("Invalid login credentials");
+      }
+    } catch (error) {
+      console.error(error);
+      // TODO: actually parse api 400 error messages
+      setErrorMessage(error.message);
+    }
   };
 
 

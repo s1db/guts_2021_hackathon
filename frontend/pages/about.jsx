@@ -6,18 +6,23 @@ const About = () => {
     <div className="divide-y divide-purple-500">
 
       <div className="pb-20"> 
+      <h1 className="text-6xl mt-12 mb-16 md:text-7xl lg:text-8xl text-center font-bold w-full">
+          <span className="py-5 text-transparent bg-clip-text text-center font-bold bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-600">
+            We are on a mission.
+          </span>
+        </h1>
         <h1 className="text-4xl mt-12 mb-24 md:text-5xl lg:text-6xl text-center font-bold w-full">
-          <span className="py-6 text-white text-center font-bold ">
-            Asking for food while in need shouldn't be taboo.
+          <span className="py-6 text-white text-center font-bold leading-8">
+            Asking for food while in need<br />shouldn't be taboo.
           </span>
         </h1>
 
-        <div className="container py-6 flex max-h-full w-full">
+        <div className="py-6 flex items-center justify-center flex-col lg:flex-row  max-h-full w-full">
 
           <div className="flex-1 self-center"> 
             <div className="px-20">
               <h2 className="py-3 text-3xl text-gray-300 text-center">
-                On this site you can look where to ask for food when you are in need. 
+                We want to make it as easy as possible for anyone to get food when they need it.
               </h2> 
 
               <h2 className="py-3 text-3xl text-gray-200 text-center font-bold">
@@ -26,9 +31,9 @@ const About = () => {
             </div>
           </div>
 
-          <div className="flex-1 w-full"> 
-            <img src="/foodbank.jpg" alt="Food Bank" className="rounded-full" />
-          </div>
+
+          <img src="/foodbank.jpg" alt="Food Bank" className="rounded-full mt-16 lg:mt-0" />
+
 
         </div>
       </div>
