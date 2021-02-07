@@ -28,7 +28,7 @@ ALLOWED_HOSTS = ["*", "localhost","127.0.0.1"]
 CORS_ALLOW_CREDENTIALS = True
 
 if ON_SERVER:
-    CORS_ORIGIN_REGEX_WHITELIST = ['*']
+    CORS_ORIGIN_REGEX_WHITELIST = ['*', "localhost"]
 else:
     CORS_ORIGIN_ALLOW_ALL = True
 
@@ -44,7 +44,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS = [
-    "corsheaders",
+    #"corsheaders",
     "django_extensions",
     "rest_framework",
     'rest_framework.authtoken',
